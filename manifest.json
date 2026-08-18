@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.mcole.sonos",
+  "name": "Sonos",
+  "version": "0.1.0",
+  "author": "Matt Cole",
+  "license": "MIT",
+  "description": "A small Sonos playback controller for the Omarchy bar.",
+  "kinds": ["bar-widget"],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Sonos",
+    "description": "Now playing and basic playback controls for a Sonos room.",
+    "category": "Audio",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "room": "",
+      "ip": "",
+      "sonoshPath": "sonosh"
+    },
+    "schema": [
+      {
+        "key": "room",
+        "type": "string",
+        "label": "Sonos room",
+        "description": "Leave blank to use sonosh's configured default room.",
+        "defaultValue": ""
+      },
+      {
+        "key": "ip",
+        "type": "string",
+        "label": "Speaker IP address",
+        "description": "Optional. Using an IP avoids speaker discovery and makes controls much faster.",
+        "defaultValue": ""
+      },
+      {
+        "key": "sonoshPath",
+        "type": "path",
+        "label": "Path to sonosh",
+        "description": "Leave blank to find sonosh on PATH.",
+        "defaultValue": "sonosh"
+      }
+    ]
+  }
+}
