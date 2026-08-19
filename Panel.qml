@@ -47,8 +47,8 @@ Panel {
     owner: root
     bar: root.bar
     open: root.opened
-    contentWidth: panel.fittedContentWidth(Style.space(360))
-    contentHeight: panel.fittedContentHeight(content.implicitHeight, Style.space(420))
+    contentWidth: panel.fittedContentWidth(Style.space(420))
+    contentHeight: panel.fittedContentHeight(content.implicitHeight, Style.space(520))
 
     ColumnLayout {
       id: content
@@ -87,7 +87,8 @@ Panel {
 
       Text {
         Layout.fillWidth: true
-        text: Model.transportLabel(sonos.transport) + (sonos.muted ? " - Muted" : "")
+        text: [Model.transportLabel(sonos.transport), sonos.source, sonos.muted ? "Muted" : ""]
+          .filter(function(value) { return value !== "" }).join(" - ")
         color: root.bar ? root.bar.foreground : Color.foreground
         opacity: 0.65
         font.family: root.bar ? root.bar.fontFamily : Style.font.family
@@ -104,20 +105,74 @@ Panel {
         Button { text: "Refresh"; enabled: !sonos.busy; onClicked: sonos.refresh() }
       }
 
-      RowLayout {
+      ColumnLayout {
         Layout.fillWidth: true
-        spacing: Style.space(8)
+        spacing: Style.space(2)
 
-        Button { text: "-"; enabled: !sonos.busy; onClicked: sonos.changeVolume(-5) }
         Text {
           Layout.fillWidth: true
-          text: "Volume " + sonos.volume + "%"
+          text: "Volume " + Math.round(volumeSlider.dragging ? volumeSlider.liveValue : sonos.volume) + "%"
           color: root.bar ? root.bar.foreground : Color.foreground
-          horizontalAlignment: Text.AlignHCenter
           font.family: root.bar ? root.bar.fontFamily : Style.font.family
           font.pixelSize: Style.font.bodySmall
         }
-        Button { text: "+"; enabled: !sonos.busy; onClicked: sonos.changeVolume(5) }
+
+        PanelSlider {
+          id: volumeSlider
+          Layout.fillWidth: true
+          bar: root.bar
+          minimum: 0
+          maximum: 100
+          step: 1
+          integer: true
+          tickCount: 5
+          value: sonos.volume
+          enabled: !sonos.busy
+          onReleased: function(value) { sonos.setVolume(value) }
+        }
+      }
+
+      Rectangle {
+        Layout.fillWidth: true
+        implicitHeight: 1
+        color: root.bar ? root.bar.foreground : Color.foreground
+        opacity: 0.2
+      }
+
+      Text {
+        Layout.fillWidth: true
+        visible: sonos.rooms.length > 0
+        text: "ROOMS"
+        color: root.bar ? root.bar.foreground : Color.foreground
+        opacity: 0.65
+        font.family: root.bar ? root.bar.fontFamily : Style.font.family
+        font.pixelSize: Style.font.bodySmall
+        font.bold: true
+      }
+
+      Repeater {
+        model: sonos.rooms
+
+        RowLayout {
+          required property var modelData
+          Layout.fillWidth: true
+          spacing: Style.space(8)
+
+          Button {
+            text: (sonos.targetIP === modelData.ip || (sonos.targetIP === "" && sonos.configuredIP === modelData.ip) ? "> " : "") + modelData.name
+            onClicked: sonos.selectRoom(modelData)
+          }
+
+          Text {
+            Layout.fillWidth: true
+            text: modelData.members.map(function(device) { return sonos.deviceLabel(device) }).join(", ")
+            color: root.bar ? root.bar.foreground : Color.foreground
+            opacity: 0.6
+            font.family: root.bar ? root.bar.fontFamily : Style.font.family
+            font.pixelSize: Style.font.caption
+            elide: Text.ElideRight
+          }
+        }
       }
 
       Text {

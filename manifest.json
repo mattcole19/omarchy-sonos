@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "io.github.mcole.sonos",
   "name": "Sonos",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Matt Cole",
   "license": "MIT",
-  "description": "A small Sonos playback controller for the Omarchy bar.",
+  "description": "Now playing, volume, and room controls for Sonos from the Omarchy bar.",
   "kinds": ["bar-widget"],
   "entryPoints": {
     "barWidget": "Panel.qml"
