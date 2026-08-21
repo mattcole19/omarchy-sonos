@@ -17,8 +17,11 @@ go install github.com/shlomiuziel/sonosh/cmd/sonosh@latest
 sonosh discover
 ```
 
+The plugin discovers and selects the first visible Sonos room automatically.
+Use the room list in its panel to switch rooms.
+
 If `sonosh` is not on Omarchy's graphical-session `PATH`, set its absolute path
-in **Setup > Plugins > Sonos**, or run:
+in **Setup > Plugins > Sonos**, or have an agent run:
 
 ```sh
 omarchy bar set io.github.mcole.sonos sonoshPath "$(command -v sonosh)"
@@ -39,16 +42,10 @@ omarchy bar move io.github.mcole.sonos --section right
 
 ## Configure
 
-By default, the plugin uses the default room configured in `sonosh`:
-
-```sh
-sonosh config set defaultRoom "Living Room"
-```
-
-Alternatively, set **Sonos room** in the plugin settings. For the fastest
-controls, set **Speaker IP address** to the room coordinator's stable LAN IP.
-This skips SSDP discovery. Reserve that address in your router before relying on
-it long-term.
+No room configuration is needed after installation. Optionally set **Sonos
+room** to choose a particular default. For the fastest controls, set **Speaker
+IP address** to the room coordinator's stable LAN IP. This skips SSDP discovery.
+Reserve that address in your router before relying on it long-term.
 
 The panel lists the full Sonos group topology, including bonded devices such as
 Sub and surround speakers. Select a visible room to control it.

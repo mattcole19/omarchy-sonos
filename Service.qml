@@ -154,6 +154,12 @@ Item {
       rooms = result.rooms
       modelQueue = result.devices
       loadNextModel()
+      // A fresh install has no target yet. Select the first visible room so the
+      // panel works without requiring a sonosh default-room configuration.
+      if (targetIP === "" && configuredIP === "" && configuredRoom === "" && rooms.length > 0) {
+        targetIP = rooms[0].ip
+        refresh()
+      }
     }
   }
 
